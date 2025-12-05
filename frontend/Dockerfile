@@ -1,13 +1,12 @@
-FROM node:18-alpine as build
+FROM node:18 as build
 WORKDIR /app
 COPY package*.json ./
-RUN if [ -f package-lock.json ] || [ -f npm-shrinkwrap.json ]; then \
-			npm ci --silent; \
-		else \
-			npm install --silent; \
-		fi
+# Ensure devDependencies (vite, plugins) are installed for the build
+RUN npm install --silent --include=dev
 COPY . .
-RUN npm run build
+# If a prebuilt `dist` exists in the build context, skip running the build
+# (this allows local `npm run build` output to be reused). Otherwise run build.
+RUN [ -d ./dist ] || npm run build
 FROM nginx:stable-alpine
 COPY --from=build /app/dist /usr/share/nginx/html
 EXPOSE 80
