@@ -62,6 +62,4 @@ A full-stack Zomato-like app using Docker Compose, Node.js (Express), PostgreSQL
 ## Security Note
 - The `/debug` route has been removed for production safety. Never expose sensitive debug/admin endpoints in production.
 
----
 
-For more help, ask your AI agent or check the codebase for details.
